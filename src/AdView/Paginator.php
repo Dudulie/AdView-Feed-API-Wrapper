@@ -3,18 +3,13 @@
 class Paginator
 {
 	/**
-	 * @var Request
+	 * @var FeedApi
 	 */
-	private $request;
+	private $feed_api;
 
-	/**
-	 * Paginator constructor.
-	 *
-	 * @param Request $request
-	 */
-	public function __construct(Request $request)
+	public function __construct(FeedApi $feed_api)
 	{
-		$this->request = $request;
+		$this->feed_api = $feed_api;
 	}
 
 	/**
@@ -22,7 +17,7 @@ class Paginator
 	 */
 	public function getCurrentPage()
 	{
-		return $this->request->getCurrentPage();
+		return $this->feed_api->getCurrentPage();
 	}
 
 	/**
@@ -30,18 +25,18 @@ class Paginator
 	 */
 	public function nextPageLink()
 	{
-		if ($this->request->getCurrentPage() == '' || $this->request->getCurrentPage() <= 0)
+		if ($this->getCurrentPage() == '' || $this->getCurrentPage() <= 0)
 		{
-			$next_page = $this->request->current_page + 2;
+			$next_page = $this->feed_api->current_page + 2;
 
-			return '?keyword=' . $this->request->getKeyword() .
-			       '&location=' . $this->request->getLocation() .
+			return '?keyword=' . $this->feed_api->getKeyword() .
+			       '&location=' . $this->feed_api->getLocation() .
 			       '&current_page=' . $next_page;
 		}
 
-		$next_page = $this->request->current_page + 1;
+		$next_page = $this->feed_api->current_page + 1;
 
-		return '?keyword=' . $this->request->getKeyword() . '&location=' . $this->request->getLocation() . '&current_page=' . $next_page;
+		return '?keyword=' . $this->feed_api->getKeyword() . '&location=' . $this->feed_api->getLocation() . '&current_page=' . $next_page;
 	}
 
 	/**
@@ -49,20 +44,25 @@ class Paginator
 	 */
 	public function previousPageLink()
 	{
-		if ($this->request->getCurrentPage() == '' || $this->request->getCurrentPage() <= 0)
+		if ($this->getCurrentPage() == '' || $this->getCurrentPage() <= 0)
 		{
 			$previous_page = $this->current_page = '';
 
-			return '?keyword=' . $this->request->getKeyword() .
-			       '&location=' . $this->request->getLocation() .
+			return '?keyword=' . $this->feed_api->getKeyword() .
+			       '&location=' . $this->feed_api->getLocation() .
 			       '&current_page=' . $previous_page;
 		}
 
-		$previous_page = $this->request->current_page - 1;
+		$previous_page = $this->feed_api->current_page - 1;
 
-		return '?keyword=' . $this->request->getKeyword() .
-		       '&location=' . $this->request->getLocation() .
+		return '?keyword=' . $this->feed_api->getKeyword() .
+		       '&location=' . $this->feed_api->getLocation() .
 		       '&current_page=' . $previous_page;
+	}
+
+	public static function create(FeedApi $feed_api)
+	{
+		return new self($feed_api);
 	}
 
 }

@@ -1,19 +1,12 @@
 <?php namespace AdView;
 
-class FeedApi
+use GuzzleHttp\Client as Guzzle;
+use GuzzleHttp\Exception\RequestException;
+
+class FeedApi extends Request
 {
 
 	const API_URL = 'https://adview.online/api/v1/jobs.json';
-
-	/**
-	 * FeedApi constructor.
-	 *
-	 * @param Request $request
-	 */
-	public function __construct(Request $request)
-	{
-		$this->request = $request;
-	}
 
 	/**
 	 * @return mixed
@@ -37,14 +30,18 @@ class FeedApi
 	public function sendRequest()
 	{
 		$query = $this->formQuery();
-		$request = self::API_URL . $query;
+		$uri = self::API_URL . $query;
 
-		if (! $jobs = @file_get_contents($request))
+		try
+		{
+			$jobs = $this->guzzle->request('GET', $uri, ['connect_timeout' => 5]);
+		}
+		catch (RequestException $exception)
 		{
 			throw new \Exception('Failed to connect to API: ' . self::API_URL);
 		}
 
-		return $jobs;
+		return $jobs->getBody()->getContents();
 	}
 
 	/**
@@ -53,25 +50,27 @@ class FeedApi
 	private function formQuery()
 	{
 		return
-			'?publisher=' . $this->request->getPublisherId() .
-			'&keyword=' . $this->request->getKeyword() .
-			'&location=' . $this->request->getLocation() .
-			'&ip=' . $this->request->getIp() .
-			'&useragent=' . urlencode($this->request->getUseragent()) .
-			'&page=' . $this->request->getCurrentPage();
+			'?publisher=' . $this->getPublisherId() .
+			'&keyword=' . $this->getKeyword() .
+			'&location=' . $this->getLocation() .
+			'&ip=' . $this->getIp() .
+			'&useragent=' . urlencode($this->getUseragent()) .
+			'&page=' . $this->getCurrentPage();
 	}
 
-	/**
-	 *
-	 */
 	public function enableClickTracking()
 	{
-		$channel = $this->request->getChannel();
-		$publisher_id = $this->request->getPublisherId();
+		$channel = $this->getChannel();
+		$publisher_id = $this->getPublisherId();
 
 		echo '<a target="_blank" href="https://adview.online" title="Job Search">jobs</a> by <a target="_blank" title="Job Search" href="https://adview.online"><img alt="AdView job search" style="border: 0; vertical-align: middle;" src="https://adview.online/job-search.png"></a>' .
 
 		     '<script type="text/javascript" src="https://adview.online/js/pub/tracking.js?publisher="' . $publisher_id . '"&channel="' . $channel . '"EXTERNAL_FRAGMENT&source=feed"></script>';
+	}
+
+	public static function create()
+	{
+		return new self(new Validator(), new Guzzle());
 	}
 }
 

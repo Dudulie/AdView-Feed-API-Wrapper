@@ -1,9 +1,9 @@
 <h1>Search for a job</h1>
 
-<form method="GET" action="/index.php?current_page=1">
+<form method="GET" action="/example/index.php?current_page=1">
 	<div class="form-group">
 		<label for="keyword">Keyword</label>
-		<input value="<?PHP echo $request->getKeyword(); ?>"
+		<input value="<?PHP echo $feed_api->getKeyword(); ?>"
 		       id="keyword"
 		       name="keyword"
 		       class="form-control"
@@ -12,7 +12,7 @@
 
 	<div class="form-group">
 		<label for="location">Location</label>
-		<input value="<?PHP echo $request->getLocation(); ?>"
+		<input value="<?PHP echo $feed_api->getLocation(); ?>"
 		       id="location"
 		       name="location"
 		       class="form-control"

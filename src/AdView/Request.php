@@ -1,5 +1,7 @@
 <?php namespace AdView;
 
+use GuzzleHttp\Client as Guzzle;
+
 class Request
 {
 	public $current_page;
@@ -10,6 +12,7 @@ class Request
 	private $location;
 	private $useragent;
 	private $channel;
+	protected $guzzle;
 
 	/**
 	 * @var Validator
@@ -30,9 +33,11 @@ class Request
 	 * Request constructor.
 	 *
 	 * @param Validator $validator
+	 * @param Guzzle $guzzle
 	 */
-	public function __construct(Validator $validator)
+	public function __construct(Validator $validator, Guzzle $guzzle)
 	{
+		$this->guzzle = $guzzle;
 		$this->validator = $validator;
 		$this->init();
 	}
