@@ -46,7 +46,7 @@ $feed_api->getLocation();
 ```
 
 **Example 2:**
-	```
+```
   <?PHP include __DIR__ . '/processor.php'; ?>
 	<!-- Loop through and show the jobs on site -->
 	<?PHP foreach ($jobs as $job): ?>
