@@ -1,6 +1,6 @@
 <h1>Search for a job</h1>
 
-<form method="GET" action="/example/index.php?current_page=1">
+<form method="GET" action="index.php?current_page=1">
 	<div class="form-group">
 		<label for="keyword">Keyword</label>
 		<input value="<?PHP echo $feed_api->getKeyword(); ?>"
