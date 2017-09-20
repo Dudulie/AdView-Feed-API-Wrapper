@@ -1,6 +1,8 @@
 <?PHP
 
-include __DIR__ . '/../vendor/autoload.php';
+/*
+ * Require autoload.php
+ */
 
 use AdView\FeedApi;
 use AdView\Paginator;
