@@ -30,7 +30,7 @@
 	<?PHP include __DIR__ . '/search_form.php'; ?>
 
 	<!-- Loop through and show the jobs on site -->
-	<?PHP foreach ($jobs as $job): ?>
+	<?PHP foreach ((array) $jobs as $job): ?>
 		<h4>
 			<a onmousedown="<?PHP echo $job->onmousedown ?>" href="<?PHP echo $job->url ?>">
 				<?PHP echo $job->title; ?>
@@ -52,7 +52,7 @@
 			<hr>
 		</div>
 
-		<div class=""><?PHP $feed_api->enableClickTracking(); ?></div>
+		<div class=""><?PHP echo $feed_api->generateTrackingScript(); ?></div>
 	</div>
 
 </div>
