@@ -3,45 +3,40 @@
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\RequestException;
 
-class FeedApi extends Request
-{
+class FeedApi extends Request {
 
 	const API_URL = 'https://adview.online/api/v1/jobs.json';
 
 	/**
 	 * @return mixed
+	 * @throws \Exception
 	 */
 	public function getJobs()
 	{
-		$jobs = $this->sendRequest();
-
-		return $this->decodeJobs($jobs)->data;
-	}
-
-	private function decodeJobs($jobs)
-	{
-		return json_decode($jobs);
-	}
-
-	/**
-	 * @return string
-	 * @throws \Exception
-	 */
-	public function sendRequest()
-	{
-		$query = $this->formQuery();
-		$uri = self::API_URL . $query;
+		$uri = (string)$this->formUri();
 
 		try
 		{
-			$jobs = $this->guzzle->request('GET', $uri, ['connect_timeout' => 5]);
+			$response = (object)$this->makeRequestToApi($uri);
 		}
 		catch (RequestException $exception)
 		{
 			throw new \Exception('Failed to connect to API: ' . self::API_URL);
 		}
 
-		return $jobs->getBody()->getContents();
+		$jobs = $response->getBody()->getContents();
+
+		return $this->decodeJobs($jobs)->data;
+	}
+
+	/**
+	 * @return string
+	 */
+	private function formUri()
+	{
+		$query = $this->formQuery();
+
+		return self::API_URL . $query;
 	}
 
 	/**
@@ -58,14 +53,30 @@ class FeedApi extends Request
 			'&page=' . $this->getCurrentPage();
 	}
 
-	public function enableClickTracking()
+	/**
+	 * @param $jobs
+	 *
+	 * @return mixed
+	 */
+	private function decodeJobs($jobs)
+	{
+		return json_decode($jobs);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function generateTrackingScript()
 	{
 		$channel = $this->getChannel();
 		$publisher_id = $this->getPublisherId();
 
-		echo '<a target="_blank" href="https://adview.online" title="Job Search">jobs</a> by <a target="_blank" title="Job Search" href="https://adview.online"><img alt="AdView job search" style="border: 0; vertical-align: middle;" src="https://adview.online/job-search.png"></a>' .
+		// TODO: not generating right URI..
+		// <script type="text/javascript" src="https://adview.online/js/pub/tracking.js?publisher=" 7"&channel="" &source="feed&quot;"></script>
 
-		     '<script type="text/javascript" src="https://adview.online/js/pub/tracking.js?publisher="' . $publisher_id . '"&channel="' . $channel . '"EXTERNAL_FRAGMENT&source=feed"></script>';
+		return '<a target="_blank" href="https://adview.online" title="Job Search">jobs</a> by <a target="_blank" title="Job Search" href="https://adview.online"><img alt="AdView job search" style="border: 0; vertical-align: middle;" src="https://adview.online/job-search.png"></a>' .
+
+		       '<script type="text/javascript" src="https://adview.online/js/pub/tracking.js?publisher="' . $publisher_id . '"&channel="' . $channel . '"&source=feed"></script>';
 	}
 
 	public static function create()
