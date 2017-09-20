@@ -25,15 +25,14 @@ class Request
 	private $messages = [
 		'invalid_ip'           => 'Invalid IP address provided.',
 		'localhost_ip_used'    => 'The IP address provided is 127.0.0.1. The URLs wont validate please use real IP address if testing on live site',
-		'invalid_publisher_id' => 'Invalid publisher id has been provided, please make sure it is an integer',
-		'no_tracking_set'      => 'Tracking has not been enabled, it can be enabled by invoking enableClickTracking() method. ',
+		'invalid_publisher_id' => 'Invalid publisher id has been provided, please make sure it is an integer'
 	];
 
 	/**
 	 * Request constructor.
 	 *
 	 * @param Validator $validator
-	 * @param Guzzle $guzzle
+	 * @param Guzzle    $guzzle
 	 */
 	public function __construct(Validator $validator, Guzzle $guzzle)
 	{
@@ -90,13 +89,20 @@ class Request
 
 	private function setCurrentPage()
 	{
-		$this->current_page = $this->parseFromGET('current_page');
+		$this->current_page = (int) $this->parseFromGET('current_page');
+
+		if ($this->current_page === 0)
+		{
+			$this->current_page = 1;
+		}
+
+		return $this->current_page;
 	}
 
 	/**
 	 * @param $channel
 	 */
-	public function setChannel($channel)
+	public function setChannel($channel = null)
 	{
 		$this->channel = $channel;
 	}
@@ -106,7 +112,7 @@ class Request
 	 *
 	 * @throws \Exception
 	 */
-	public function setPublisherId($publisher_id)
+	public function setPublisherId($publisher_id = 7)
 	{
 		if (! $this->validator->isValidPublisherId($publisher_id))
 		{
@@ -190,5 +196,15 @@ class Request
 	private function parseFromGET($get_parameter)
 	{
 		return isset($_GET[$get_parameter]) ? $_GET[$get_parameter] : '';
+	}
+
+	/**
+	 * @param $uri
+	 *
+	 * @return mixed|\Psr\Http\Message\ResponseInterface
+	 */
+	protected function makeRequestToApi($uri)
+	{
+		return $this->guzzle->request('GET', $uri, ['connect_timeout' => 5]);
 	}
 }
