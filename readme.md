@@ -26,7 +26,7 @@ $feed_api->setPublisherId(7);
 $feed_api->setChannel('sidebar');
 
 /* Enable tracking. Tracking must always be enabled
- * It will automatically echo script code to whatever page this method in invoked on.
+ * It will automatically echo script code to whatever page this method is invoked on.
  */
 $feed_api->enableClickTracking();
 
@@ -39,7 +39,7 @@ $paginator->nextPageLink();
 $paginator->getCurrentPage();
 
 /* Get data
- * Many uses for example echoing it in the HTML form for users convenience.
+ * Many use for example to echo it in HTML form for users convenience.
  */
 $feed_api->getKeyword();
 $feed_api->getLocation();
@@ -47,16 +47,18 @@ $feed_api->getLocation();
 
 **Example 2:**
 ```
-  <?PHP include __DIR__ . '/processor.php'; ?>
-	<!-- Loop through and show the jobs on site -->
-	<?PHP foreach ($jobs as $job): ?>
-    <h4>
-      <a onmousedown="<?PHP echo $job->onmousedown ?>" href="<?PHP echo $job->url ?>">
+<?PHP include __DIR__ . '/processor.php'; ?>
+
+<!-- Loop through and show the jobs on site -->
+<?PHP foreach ($jobs as $job): ?>
+
+<h4>
+    <a onmousedown="<?PHP echo $job->onmousedown ?>" href="<?PHP echo $job->url ?>">
         <?PHP echo $job->title; ?>
-      </a>
-    </h4>
-    <h5> <?PHP echo $job->snippet; ?> </h5>
-    <span class="fa fa-compass"> <?PHP echo $job->location; ?>  </span>
-    <hr>
-	<?PHP endforeach; ?>
+    </a>
+</h4>
+
+<h5> <?PHP echo $job->snippet; ?> </h5>
+<span class="fa fa-compass"> <?PHP echo $job->location; ?></span> <hr>
+<?PHP endforeach; ?>
   ```
