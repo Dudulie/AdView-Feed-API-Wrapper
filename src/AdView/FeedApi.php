@@ -71,9 +71,6 @@ class FeedApi extends Request {
 		$channel = $this->getChannel();
 		$publisher_id = $this->getPublisherId();
 
-		// TODO: not generating right URI..
-		// <script type="text/javascript" src="https://adview.online/js/pub/tracking.js?publisher=" 7"&channel="" &source="feed&quot;"></script>
-
 		return '<a target="_blank" href="https://adview.online" title="Job Search">jobs</a> by <a target="_blank" title="Job Search" href="https://adview.online"><img alt="AdView job search" style="border: 0; vertical-align: middle;" src="https://adview.online/job-search.png"></a>' .
 
 		       '<script type="text/javascript" src="https://adview.online/js/pub/tracking.js?publisher="' . $publisher_id . '"&channel="' . $channel . '"&source=feed"></script>';
