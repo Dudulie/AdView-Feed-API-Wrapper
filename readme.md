@@ -25,10 +25,10 @@ $paginator = Paginator::create($feed_api);
 $feed_api->setPublisherId(7);
 $feed_api->setChannel('sidebar');
 
-/* Enable tracking. Tracking must always be enabled
- * It will automatically echo script code to whatever page this method is invoked on.
+/* 
+ * Enable tracking. Tracking must always be enabled
  */
-$feed_api->enableClickTracking();
+echo $feed_api->enableClickTracking();
 
 /* Get generated links
  * These links can be used to create pagination.
