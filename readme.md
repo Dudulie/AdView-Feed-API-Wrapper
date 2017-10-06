@@ -1,6 +1,6 @@
-## [AdView](http://adview.online/) Feed API Implementation
+## AdView Feed API Implementation
 
-**Simple wrapper to help you interact with AdView Feed API. This will take care of reading required input like 'keyword', 'location' and automatically bootstrap other required data like useragent, user IP etc.., aswell as setting pagination.**
+**Simple wrapper to help you interact with [AdView Feed API](https://adview.online/publisher). This will take care of reading required input like 'keyword', 'location' and automatically bootstrap other required data like useragent, user IP etc.., aswell as setting pagination.**
 
 For usage examples refer to `adview/adview-feedapi/example/processor.php` and `adview/adview-feedapi/example/index.php` and also feel free to browse through `adview/src/AdView` for publicly available methods. If you'd like to try it out as is then copy contents of `adview/adview-feedapi/example/` to root directory of your project.
 
