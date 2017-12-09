@@ -28,7 +28,7 @@ $feed_api->setChannel('sidebar');
 /* 
  * Enable tracking. Tracking must always be enabled
  */
-echo $feed_api->enableClickTracking();
+echo $feed_api->getClicksTrackingScript();
 
 /* Get generated links
  * These links can be used to create pagination.
@@ -38,27 +38,25 @@ $paginator->previousPageLink();
 $paginator->nextPageLink();
 $paginator->getCurrentPage();
 
-/* Get data
- * Many use for example to echo it in HTML form for users convenience.
- */
+// Get data
 $feed_api->getKeyword();
 $feed_api->getLocation();
 ```
 
 **Example 2:**
 ```
-<?PHP include __DIR__ . '/processor.php'; ?>
-
 <!-- Loop through and show the jobs on site -->
-<?PHP foreach ($jobs as $job): ?>
-
-<h4>
-    <a onmousedown="<?PHP echo $job->onmousedown ?>" href="<?PHP echo $job->url ?>">
-        <?PHP echo $job->title; ?>
-    </a>
-</h4>
-
-<h5> <?PHP echo $job->snippet; ?> </h5>
-<span class="fa fa-compass"> <?PHP echo $job->location; ?></span> <hr>
+<?PHP foreach ((array) $jobs as $job): ?>
+    <h4>
+        <a onmousedown="<?PHP echo $job->onmousedown ?>" href="<?PHP echo $job->url ?>">
+            <?PHP echo $job->title; ?>
+        </a>
+    </h4>
+    
+    <h5> <?PHP echo $job->snippet; ?> </h5>
+    
+    <span class="fa fa-compass"> <?PHP echo $job->location; ?>  </span>
+    
+    <hr>
 <?PHP endforeach; ?>
   ```

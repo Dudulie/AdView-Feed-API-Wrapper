@@ -1,4 +1,5 @@
-<?php namespace AdView;
+<?php
+namespace AdView;
 
 use GuzzleHttp\Client as Guzzle;
 
@@ -12,6 +13,10 @@ class Request
 	private $location;
 	private $useragent;
 	private $channel;
+
+    /**
+     * @var Guzzle
+     */
 	protected $guzzle;
 
 	/**
@@ -24,7 +29,10 @@ class Request
 	 */
 	private $messages = [
 		'invalid_ip'           => 'Invalid IP address provided.',
-		'localhost_ip_used'    => 'The IP address provided is 127.0.0.1. The URLs wont validate please use real IP address if testing on live site',
+
+		'localhost_ip_used'    => 'The IP address provided is 127.0.0.1.
+		                           The URLs won\'t validate on localhost but they will work fine once on live site',
+
 		'invalid_publisher_id' => 'Invalid publisher id has been provided, please make sure it is an integer'
 	];
 
@@ -60,34 +68,36 @@ class Request
 	{
 		$ip = $_SERVER['REMOTE_ADDR'];
 
-		if ($this->validator->isLocalhost($ip))
-		{
+		if ($this->validator->isLocalhost($ip)) {
 			trigger_error($this->getMessage('localhost_ip_used'), E_USER_WARNING);
 		}
 
-		if (! $this->validator->isValidIp($ip))
-		{
-			throw new \Exception($this->getMessage('invalid_ip'));
+		if (! $this->validator->isValidIp($ip)) {
+			trigger_error($this->getMessage('invalid_ip'), E_USER_WARNING);
 		}
+
 		$this->ip = $ip;
 	}
 
-	private function setKeyword()
+    private function setKeyword()
 	{
 		$this->keyword = $this->parseFromGET('keyword');
 	}
 
-	private function setLocation()
+    private function setLocation()
 	{
 		$this->location = $this->parseFromGET('location');
 	}
 
-	private function setUseragent()
+    private function setUseragent()
 	{
 		$this->useragent = $_SERVER['HTTP_USER_AGENT'];
 	}
 
-	private function setCurrentPage()
+    /**
+     * @return int
+     */
+    private function setCurrentPage()
 	{
 		$this->current_page = (int) $this->parseFromGET('current_page');
 
@@ -114,8 +124,7 @@ class Request
 	 */
 	public function setPublisherId($publisher_id = 7)
 	{
-		if (! $this->validator->isValidPublisherId($publisher_id))
-		{
+		if (! $this->validator->isValidPublisherId($publisher_id)) {
 			throw new \Exception($this->getMessage($this->getMessage('invalid_publisher_id')));
 		}
 
